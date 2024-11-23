@@ -1,0 +1,15 @@
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  #crypto-list {
+    margin-top: 20px;
+  }
+  .coin {
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+  }
+  .coin p {
+    margin: 5px 0;
+  }

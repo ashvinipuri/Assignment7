@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Quiz</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+</head>
+<body>
+  <h1>Quiz Application</h1>
+  <label>Category:</label>
+  <select id="category">
+    <option value="9">General Knowledge</option>
+    <option value="11">Entertainment: Film</option>
+    <option value="12">Entertainment: Music</option>
+    <option value="18">Science: Computers</option>
+  </select>
+  <label>Difficulty:</label>
+  <select id="difficulty">
+    <option value="easy">Easy</option>
+    <option value="medium">Medium</option>
+    <option value="hard">Hard</option>
+  </select>
+  <button id="start">Start Quiz</button>
+  
+  <div id="quiz"></div>
+  <button id="submit" style="display:none;">Submit</button>
+  <p id="score"></p>
+
+  <script>
+    $(document).ready(function () {
+      let questions = [];
+      let score = 0;
+
+      $('#start').click(function () {
+        const category = $('#category').val();
+        const difficulty = $('#difficulty').val();
+        const url = `https://opentdb.com/api.php?amount=5&type=multiple&category=${category}&difficulty=${difficulty}`;
+
+        $.getJSON(url, function (data) {
+          questions = data.results;
+          $('#quiz').empty();
+          questions.forEach((q, i) => {
+            const options = [...q.incorrect_answers, q.correct_answer].sort(() => 0.5 - Math.random());
+            $('#quiz').append(`<p>${i + 1}. ${q.question}</p>`);
+            options.forEach(opt => {
+              $('#quiz').append(`<label><input type="radio" name="q${i}" value="${opt}"> ${opt}</label><br>`);
+            });
+          });
+          $('#submit').show();
+        });
+      });
+
+    
+      $('#submit').click(function () {
+        score = 0;
+        questions.forEach((q, i) => {
+          const answer = $(`input[name="q${i}"]:checked`).val();
+          if (answer === q.correct_answer) score++;
+        });
+        $('#score').text(`Your Score: ${score} / ${questions.length}`);
+      });
+    });
+  </script>
+</body>
+</html>
